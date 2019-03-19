@@ -11,6 +11,10 @@ set(CMAKE_CXX_STANDARD 17)
 if (APPLE)
     add_definitions(-DLIBSTDAUDIO_BACKEND_COREAUDIO)
     set(CMAKE_EXE_LINKER_FLAGS "-framework CoreAudio")
+elseif (WIN32)
+	add_definitions(-DLIBSTDAUDIO_BACKEND_WASAPI)
+elseif (UNIX AND NOT APPLE)
+	#We land here if we are under Linux or some BSD variant that is not MacOS, or some other Unix platform...
 else ()
     add_definitions(-DLIBSTDAUDIO_BACKEND_NONE)
 endif ()
@@ -23,6 +27,7 @@ add_library(stdaudio
         src/buffer.cpp
         src/buffer_list.cpp
         src/backend/coreaudio_backend.cpp
+        src/backend/wasapi_backend.cpp
         src/backend/null_backend.cpp)
 
 add_executable(white_noise examples/white_noise.cpp)
